@@ -12,6 +12,7 @@ public class CheatActivity extends AppCompatActivity {
 
     public static final String EXTRA_ANSWER_IS_TRUE = "com.example.geoquiz.answer_is_true";
     public static final String EXTRA_ANSWER_SHOWN = "com.example.geoquiz.answer_button";
+    private static final String KEY_INDEX = "index_key_ChA"; // константа для сохранения Activity при поворотах экрана
     private boolean mAnswerIsTrue;
 
     private TextView mAnswerTextView ;
@@ -22,6 +23,9 @@ public class CheatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cheat);
 
+        if (savedInstanceState != null){
+            mAnswerIsTrue = savedInstanceState.getBoolean(KEY_INDEX,false);
+        }
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
 
         mAnswerTextView = (TextView) findViewById(R.id.answerTextView);
@@ -40,6 +44,11 @@ public class CheatActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_INDEX, mAnswerIsTrue);
+    }
 
     public static Intent newIntent(Context context, boolean answerIsTrue){
 

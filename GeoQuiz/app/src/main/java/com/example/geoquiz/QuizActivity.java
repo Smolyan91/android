@@ -11,18 +11,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class QuizActivity extends AppCompatActivity {
 
     private static final String TAG = "QuizActivity";
-    private static final String KEY_INDEX = "index_key"; // константа для сохранения Activity при поворотах экрана
+    private static final String KEY_INDEX = "index_key_QA"; // константа для сохранения Activity при поворотах экрана
     private static final int REQUEST_CODE_CHEAT = 0;
+
     private static Date date = new Date();
 
     private int mCurrentIndex = 0; // для индексации массива
     private int mPreviosIndex = 0; //для сохр предыдущего вопроса
     private boolean mIsCheater;
-
+    private boolean isNotRepeat;
+    private Map<Integer, Boolean> mapRepeat = new HashMap<>();
     private Button mTrueButton;
     private Button mFalseButton;
     private Button mNextButton;
@@ -46,6 +50,7 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz);
         if (savedInstanceState != null){
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
+            mIsCheater = savedInstanceState.getBoolean(KEY_INDEX, false);
         }
 
         mTrueButton = (Button) findViewById(R.id.true_button);
@@ -75,7 +80,17 @@ public class QuizActivity extends AppCompatActivity {
                 mPreviosIndex = mCurrentIndex;
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 mIsCheater = false;
-                updateQuestion();
+                isNotRepeat = false;
+                for (Map.Entry<Integer, Boolean> entry: mapRepeat.entrySet()){
+                    if (entry.getKey().equals(mQuestionBank[mCurrentIndex].getTextResId())){
+                        isNotRepeat = true;
+                        try {
+                            updateBecauseCheater();
+                        }catch (InterruptedException e){
+                        }
+                    }
+                }
+                if (!isNotRepeat) updateQuestion();
             }
         });
         mPrevButton = (Button) findViewById(R.id.prev_button);
@@ -103,6 +118,7 @@ public class QuizActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         Log.i(TAG, "onSaneInstanceState");
         outState.putInt(KEY_INDEX, mCurrentIndex);
+        outState.putBoolean(KEY_INDEX, mIsCheater);
     }
 
     @Override
@@ -135,6 +151,12 @@ public class QuizActivity extends AppCompatActivity {
         Log.d(TAG, "onResume called");
     }
 
+    private void updateBecauseCheater()throws InterruptedException{
+        int question = mQuestionBank[mCurrentIndex].getTextResId();
+        mQuestionTextView.setText(question);
+        Thread.sleep(8000);
+        mQuestionTextView.setText("This question is CHEAT!!");
+    }
     private void updateQuestion(){
         int question = mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
@@ -146,6 +168,7 @@ public class QuizActivity extends AppCompatActivity {
 
         if (mIsCheater){
             messageResId = R.string.judgment_toast;
+            mapRepeat.put(mQuestionBank[mCurrentIndex].getTextResId(), true);
         }else {
             if (userPassedTrue == answerIsTrue){
                 messageResId = R.string.correct_toast;
