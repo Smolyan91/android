@@ -20,7 +20,9 @@ public class CrimeActivity extends FragmentActivity {
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
 
         if (fragment == null){
+
             fragment = new CrimeFragment();
+            //Создать новую транзакцию фрагмента, включить в нее одну операцию add, а затем закрепить
             fm.beginTransaction()
                     .add(R.id.fragmentContainer,fragment)
                     .commit();
