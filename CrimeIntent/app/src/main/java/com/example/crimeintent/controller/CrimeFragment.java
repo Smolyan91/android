@@ -16,6 +16,8 @@ import android.widget.EditText;
 import com.example.crimeintent.R;
 import com.example.crimeintent.model.Crime;
 
+import java.text.SimpleDateFormat;
+
 /**
  * Created by Администратор on 17.01.2017.
  * CrimeFragment — контроллер, взаимодействующий с объектами модели и представления.
@@ -24,6 +26,7 @@ import com.example.crimeintent.model.Crime;
 
 public class CrimeFragment extends Fragment {
 
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE, MMMM dd, yyyy");
     private Crime mCrime;
     private EditText mTitleField;
     private Button mDateButton; //для франения даты кнопка(и последующего UI изменения)
@@ -73,7 +76,7 @@ public class CrimeFragment extends Fragment {
 
         //Кнопка даты
         mDateButton = (Button) v.findViewById(R.id.crime_date);
-        mDateButton.setText(mCrime.getDate().toString());
+        mDateButton.setText(simpleDateFormat.format(mCrime.getDate()));
         mDateButton.setEnabled(false);  //кнопка не будет реагировать на нажатия(на время)
 
         //Чек бокс
