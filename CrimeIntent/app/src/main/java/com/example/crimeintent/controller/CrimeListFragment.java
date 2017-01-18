@@ -7,10 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.crimeintent.R;
 import com.example.crimeintent.model.Crime;
+import com.example.crimeintent.model.CrimeLab;
 
 import java.util.List;
 
@@ -37,6 +39,7 @@ import java.util.List;
 public class CrimeListFragment extends Fragment{
 
     private RecyclerView mCrimeRecyclerView; // для использования виджетов TextView
+    private CrimeAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
@@ -45,17 +48,41 @@ public class CrimeListFragment extends Fragment{
         //После создания виджета RecyclerView ему назначается другой объект LayoutManager.
         // Это необходимо для работы виджета RecyclerView.
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        updateUI();
         return view;
     }
+
+    /**
+     * Метод updateUI, который настраивает пользовательский интерфейс CrimeListFragment.
+     */
+    private void updateUI() {
+        CrimeLab crimeLab = CrimeLab.getInstanceCrimeLab(getActivity());
+        List<Crime> crimes = crimeLab.getmCrimes();
+        mAdapter = new CrimeAdapter(crimes);
+        mCrimeRecyclerView.setAdapter(mAdapter);
+    }
+
     /*
     *   Объекты Crime остаются невидимыми до тех пор, пока не будут определены реализации Adapter и ViewHolder
     */
     private class CrimeHolder extends RecyclerView.ViewHolder{
-        public TextView mTitleTextView;
+        private TextView mTitleTextView; //в макете list_item_crime
+        private TextView mDateTextView;
+        private CheckBox mSolvedChekBox;
+        private Crime mCrime;
 
         public CrimeHolder(View itemView){
             super(itemView);
-            mTitleTextView = (TextView) itemView;
+            mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_crime_title_text_view);
+            mDateTextView = (TextView) itemView.findViewById(R.id.list_item_crime_date_text_view);
+            mSolvedChekBox = (CheckBox) itemView.findViewById(R.id.list_item_crime_solved_check_box);
+        }
+
+        public void bindCrime(Crime crime){
+            mCrime = crime;
+            mTitleTextView.setText(mCrime.getmTitle());
+            mDateTextView.setText(mCrime.getDate().toString());
+            mSolvedChekBox.setChecked(mCrime.isSolved());
         }
     }
 
@@ -70,17 +97,36 @@ public class CrimeListFragment extends Fragment{
             mCrimes = crimes;
         }
 
+        /***
+         * Метод onCreateViewHolder вызывается виджетом RecyclerView, когда ему потребуется новое представление
+         * для отображения элемента. В этом методе мы создаем объект View и упаковываем его в ViewHolder. RecyclerView
+         * пока не ожидает, что представление будет связано с какими-либо данными.
+         * Для получения представления мы заполняем макет из стандартной библиотеки Android с именем simple_list_item_1.
+         * Этот макет содержит один виджет TextView, оформленный так, чтобы он хорошо смотрелся в списке.
+         * @param parent
+         * @param viewType
+         * @return
+         */
         @Override
         public CrimeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            View view = layoutInflater.inflate(R.layout.list_item_crime, parent, false);
             return new CrimeHolder(view);
         }
 
+        /**
+         * Этот метод связывает представление View объекта ViewHolder с объектом модели. При вызове он получает
+         * ViewHolder и позицию в наборе данных. Позиция используется для нахождения правильных данных модели,
+         * после чего View обновляется в соответствии с этими данными.
+         * В этой реализации эта позиция определяет индекс объекта Crime в массиве. После получения нужного объекта
+         * мы связываем его с View, присваивая его заголовок виджету TextView из ViewHolder.
+         * @param holder
+         * @param position
+         */
         @Override
         public void onBindViewHolder(CrimeHolder holder, int position) {
             Crime crime = mCrimes.get(position);
-            holder.mTitleTextView.setText(crime.getmTitle());
+            holder.bindCrime(crime);
         }
 
         @Override
