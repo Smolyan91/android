@@ -1,4 +1,4 @@
-package com.example.crimeintent.model;
+package com.example.crimeintent;
 
 import java.util.Date;
 import java.util.UUID;

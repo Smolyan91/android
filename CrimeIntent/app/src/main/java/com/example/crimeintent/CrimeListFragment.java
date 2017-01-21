@@ -1,5 +1,6 @@
-package com.example.crimeintent.controller;
+package com.example.crimeintent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,10 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-
-import com.example.crimeintent.R;
-import com.example.crimeintent.model.Crime;
-import com.example.crimeintent.model.CrimeLab;
 
 import java.util.List;
 
@@ -41,6 +38,13 @@ public class CrimeListFragment extends Fragment{
     private RecyclerView mCrimeRecyclerView; // для использования виджетов TextView
     private CrimeAdapter mAdapter;
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_crime_list,container,false);
@@ -58,14 +62,18 @@ public class CrimeListFragment extends Fragment{
     private void updateUI() {
         CrimeLab crimeLab = CrimeLab.getInstanceCrimeLab(getActivity());
         List<Crime> crimes = crimeLab.getmCrimes();
-        mAdapter = new CrimeAdapter(crimes);
-        mCrimeRecyclerView.setAdapter(mAdapter);
+        if (mAdapter == null){
+            mAdapter = new CrimeAdapter(crimes);
+            mCrimeRecyclerView.setAdapter(mAdapter);
+        }else {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     /*
     *   Объекты Crime остаются невидимыми до тех пор, пока не будут определены реализации Adapter и ViewHolder
     */
-    private class CrimeHolder extends RecyclerView.ViewHolder{
+    private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView mTitleTextView; //в макете list_item_crime
         private TextView mDateTextView;
         private CheckBox mSolvedChekBox;
@@ -76,6 +84,7 @@ public class CrimeListFragment extends Fragment{
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_crime_title_text_view);
             mDateTextView = (TextView) itemView.findViewById(R.id.list_item_crime_date_text_view);
             mSolvedChekBox = (CheckBox) itemView.findViewById(R.id.list_item_crime_solved_check_box);
+            itemView.setOnClickListener(this);
         }
 
         public void bindCrime(Crime crime){
@@ -83,6 +92,12 @@ public class CrimeListFragment extends Fragment{
             mTitleTextView.setText(mCrime.getmTitle());
             mDateTextView.setText(mCrime.getDate().toString());
             mSolvedChekBox.setChecked(mCrime.isSolved());
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = CrimeActivity.newIntent(getActivity(),mCrime.getmId()); //запуск детализации
+            startActivity(intent);
         }
     }
 

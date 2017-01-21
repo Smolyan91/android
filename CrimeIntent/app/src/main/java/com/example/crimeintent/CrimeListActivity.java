@@ -1,8 +1,6 @@
-package com.example.crimeintent.controller;
+package com.example.crimeintent;
 
 import android.support.v4.app.Fragment;
-
-import com.example.crimeintent.SingleFragmentActivity;
 
 /**
  * Created by Администратор on 18.01.2017.
