@@ -2,35 +2,34 @@
 <!-- RelativeLayout позволяет использовать параметры макета для размещения дочерних представлений
 относительно корневого макета и друг друга. Мы хотим, чтобы виджет CheckBox автоматически выравнивался
 по правой стороне RelativeLayout. Два виджета TextView будут выравниваться относительно CheckBox.-->
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <CheckBox
-        android:id="@+id/list_item_crime_solved_check_box"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:padding="4dp"/>
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/list_item_crime_title_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/list_item_crime_solved_check_box"
-        android:textStyle="bold"
-        android:padding="4dp"
-        tools:text="Crime Title"/>
+        <CheckBox
+            android:id="@+id/list_item_crime_solved_check_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="4dp"/>
 
-    <TextView
-        android:id="@+id/list_item_crime_date_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/list_item_crime_solved_check_box"
-        android:layout_below="@id/list_item_crime_title_text_view"
-        android:padding="4dp"
-        tools:text="Crime Date"/>
+        <TextView
+            android:id="@+id/list_item_crime_title_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/list_item_crime_solved_check_box"
+            android:textStyle="bold"
+            android:padding="4dp"
+            tools:text="Crime Title"/>
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/list_item_crime_date_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/list_item_crime_solved_check_box"
+            android:layout_below="@id/list_item_crime_title_text_view"
+            android:padding="4dp"
+            tools:text="Crime Date"/>
+    </RelativeLayout>

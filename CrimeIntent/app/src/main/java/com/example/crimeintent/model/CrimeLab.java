@@ -36,12 +36,11 @@ public class CrimeLab {
     }
 
     public Crime getCrime(UUID id){
-        for (Crime crime :
-                mCrimes) {
+        for (Crime crime : mCrimes) {
             if (crime.getmId().equals(id)) {
                 return crime;
             }
-            }
+        }
         return null;
     }
 }
