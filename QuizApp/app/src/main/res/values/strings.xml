@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Quiz Mathematics</string>
+    <string name="question_text">How many 2 + 2 * 2 ?</string>
+    <string name="true_button">True</string>
+    <string name="correct_ans">Correct!</string>
+    <string name="false_button">False</string>
+    <string name="incorrect_ans">Incorrect!</string>
+    <string name="action_settings">Settings</string>
+</resources>
