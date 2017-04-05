@@ -1,9 +1,18 @@
 <resources>
     <string name="app_name">Quiz Mathematics</string>
-    <string name="question_text">How many 2 + 2 * 2 ?</string>
+
+    <string name="question_1"> 2 + 2 * 2 == 6 ?</string>
+    <string name="question_2"> lg 100 == 2 ?</string>
+    <string name="question_3"> sin (n/2) == -1 ?</string>
+    <string name="question_4"> a^x=8 => x == 4 ?</string>
+    <string name="question_5"> 2,12,72... next is 432 ?</string>
+    <string name="question_6"> 5! == 120 ?</string>
+    <string name="question_7"> 2x=10 x==5 ?</string>
+
     <string name="true_button">True</string>
     <string name="correct_ans">Correct!</string>
     <string name="false_button">False</string>
     <string name="incorrect_ans">Incorrect!</string>
     <string name="action_settings">Settings</string>
+    <string name="next_button">Next</string>
 </resources>
