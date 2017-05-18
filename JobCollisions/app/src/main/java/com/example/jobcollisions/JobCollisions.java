@@ -1,8 +1,11 @@
 package com.example.jobcollisions;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+
+import com.example.jobcollisions.controller.CrimeFragment;
 
 public class JobCollisions extends FragmentActivity {
 
@@ -10,5 +13,16 @@ public class JobCollisions extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Создаем менеджера фрагмента
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+
+        if (fragment == null){
+            fragment = new CrimeFragment();
+            fm.beginTransaction()
+                    .add(R.id.fragmentContainer, fragment)
+                    .commit();
+        }
     }
 }
