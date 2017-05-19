@@ -8,6 +8,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.example.jobcollisions.R;
@@ -22,6 +25,8 @@ public class CrimeFragment extends Fragment {
 
     private Crime mCrime;
     private EditText mEditText;
+    private CheckBox mSolvedCheckBox;
+    private Button mDateButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -43,20 +48,26 @@ public class CrimeFragment extends Fragment {
         mEditText = (EditText) view.findViewById(R.id.crime_title);
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mCrime.setmTitle(s.toString());
+                mCrime.setTitle(s.toString());
             }
-
             @Override
-            public void afterTextChanged(Editable s) {
-
+            public void afterTextChanged(Editable s) {}
+        });
+        mDateButton = (Button) view.findViewById(R.id.crime_date);
+        mDateButton.setText(mCrime.getDate().toString());
+        mDateButton.setEnabled(false); //TODO разлочить после обвеса событием
+        mSolvedCheckBox = (CheckBox) view.findViewById(R.id.crime_solved);
+        mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mSolvedCheckBox.setChecked(isChecked);
             }
         });
+
+
         return view;
     }
 }
