@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import android.widget.EditText;
 import com.example.jobcollisions.R;
 import com.example.jobcollisions.model.Crime;
 
+import java.text.SimpleDateFormat;
+
 /**
  * Fragment
  * @author SmolyanovIS
@@ -23,6 +26,7 @@ import com.example.jobcollisions.model.Crime;
 
 public class CrimeFragment extends Fragment {
 
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM d, yyyy");
     private Crime mCrime;
     private EditText mEditText;
     private CheckBox mSolvedCheckBox;
@@ -57,7 +61,7 @@ public class CrimeFragment extends Fragment {
             public void afterTextChanged(Editable s) {}
         });
         mDateButton = (Button) view.findViewById(R.id.crime_date);
-        mDateButton.setText(mCrime.getDate().toString());
+        mDateButton.setText(dateFormat.format(mCrime.getDate()));
         mDateButton.setEnabled(false); //TODO разлочить после обвеса событием
         mSolvedCheckBox = (CheckBox) view.findViewById(R.id.crime_solved);
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
