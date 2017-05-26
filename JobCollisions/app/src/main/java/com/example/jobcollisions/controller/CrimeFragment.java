@@ -70,8 +70,6 @@ public class CrimeFragment extends Fragment {
                 mSolvedCheckBox.setChecked(isChecked);
             }
         });
-
-
         return view;
     }
 }

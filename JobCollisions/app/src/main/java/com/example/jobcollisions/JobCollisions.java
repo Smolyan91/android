@@ -6,23 +6,13 @@ import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 
 import com.example.jobcollisions.controller.CrimeFragment;
+import com.example.jobcollisions.controller.SingleFragmentActivity;
 
-public class JobCollisions extends FragmentActivity {
+public class JobCollisions extends SingleFragmentActivity {
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        //Создаем менеджера фрагмента
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
-
-        if (fragment == null){
-            fragment = new CrimeFragment();
-            fm.beginTransaction()
-                    .add(R.id.fragmentContainer, fragment)
-                    .commit();
-        }
+    protected Fragment createFragment() {
+        return new CrimeFragment();
     }
 }
