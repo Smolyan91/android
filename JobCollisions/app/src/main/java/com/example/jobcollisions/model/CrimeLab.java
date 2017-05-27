@@ -38,6 +38,7 @@ public class CrimeLab {
     public List<Crime> getCrimeList() {
         return crimeList;
     }
+
     public Crime getCrime(UUID id){
         for (Crime crime :  crimeList){
             if (crime.getId().equals(id)){
