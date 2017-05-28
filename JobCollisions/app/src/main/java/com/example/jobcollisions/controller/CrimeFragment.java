@@ -29,6 +29,7 @@ import java.util.UUID;
 
 public class CrimeFragment extends Fragment {
 
+    private static final String ARG_CRIME_ID = "crime_id";
     private SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM d, yyyy");
     private Crime mCrime;
     private EditText mEditText;
@@ -38,11 +39,19 @@ public class CrimeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        UUID crimeUUID = (UUID) getActivity().getIntent()
-                .getSerializableExtra(JobCollisions.EXTRA_CRIME_ID);
+        UUID crimeUUID = (UUID) getArguments()
+                .getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.getCrimeLab(getActivity()).getCrime(crimeUUID);
     }
 
+    public static CrimeFragment newInstance(UUID uuid){
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_CRIME_ID,uuid);
+
+        CrimeFragment fragment = new CrimeFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
     /***
      * false -нужно ли вкл заполненное предст в родителя
      * @param inflater

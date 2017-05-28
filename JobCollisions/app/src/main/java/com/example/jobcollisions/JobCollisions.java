@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class JobCollisions extends SingleFragmentActivity {
 
-    public static final String EXTRA_CRIME_ID = "com.example.jobcollisions.jobcollisions.crime_id";
+    private static final String EXTRA_CRIME_ID = "com.example.jobcollisions.jobcollisions.crime_id";
 
     public static Intent mewIntent(Context packegeContext, UUID crimeId){
         Intent intent = new Intent(packegeContext, JobCollisions.class);
@@ -24,6 +24,8 @@ public class JobCollisions extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        return new CrimeFragment();
+       UUID crimeId = (UUID) getIntent()
+               .getSerializableExtra(EXTRA_CRIME_ID);
+        return CrimeFragment.newInstance(crimeId);
     }
 }
