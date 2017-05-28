@@ -16,7 +16,7 @@ public class JobCollisions extends SingleFragmentActivity {
 
     private static final String EXTRA_CRIME_ID = "com.example.jobcollisions.jobcollisions.crime_id";
 
-    public static Intent mewIntent(Context packegeContext, UUID crimeId){
+    public static Intent newIntent(Context packegeContext, UUID crimeId){
         Intent intent = new Intent(packegeContext, JobCollisions.class);
         intent.putExtra(EXTRA_CRIME_ID, crimeId);
         return intent;

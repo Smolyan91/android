@@ -35,6 +35,7 @@ public class CrimeFragment extends Fragment {
     private EditText mEditText;
     private CheckBox mSolvedCheckBox;
     private Button mDateButton;
+    private static boolean isChecked;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -47,7 +48,6 @@ public class CrimeFragment extends Fragment {
     public static CrimeFragment newInstance(UUID uuid){
         Bundle args = new Bundle();
         args.putSerializable(ARG_CRIME_ID,uuid);
-
         CrimeFragment fragment = new CrimeFragment();
         fragment.setArguments(args);
         return fragment;
@@ -80,9 +80,16 @@ public class CrimeFragment extends Fragment {
         mDateButton.setEnabled(false); //TODO разлочить после обвеса событием
         mSolvedCheckBox = (CheckBox) view.findViewById(R.id.crime_solved);
         mSolvedCheckBox.setChecked(mCrime.isSolved());
-        mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        //mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        //    @Override
+         //   public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+          //      mSolvedCheckBox.setChecked(isChecked);
+           // }
+        //});
+        mSolvedCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onClick(View v) {
+                isChecked = mSolvedCheckBox.isChecked();
                 mSolvedCheckBox.setChecked(isChecked);
             }
         });
