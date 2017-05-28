@@ -1,5 +1,6 @@
 package com.example.jobcollisions.controller.crime_list;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jobcollisions.JobCollisions;
 import com.example.jobcollisions.R;
 import com.example.jobcollisions.model.Crime;
 import com.example.jobcollisions.model.CrimeLab;
@@ -67,9 +69,8 @@ public class CrimeListFragment extends Fragment{
 
         @Override
         public void onClick(View v) {
-            //TODO пока выводим текст, далее перейдем на детализацию
-            Toast.makeText(getActivity(), mCrime.getTitle() + " clicked!", Toast.LENGTH_SHORT)
-                    .show();
+            Intent intent = JobCollisions.mewIntent(getActivity(),mCrime.getId());
+            startActivity(intent);
         }
     }
 

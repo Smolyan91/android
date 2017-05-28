@@ -14,10 +14,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import com.example.jobcollisions.JobCollisions;
 import com.example.jobcollisions.R;
 import com.example.jobcollisions.model.Crime;
+import com.example.jobcollisions.model.CrimeLab;
 
 import java.text.SimpleDateFormat;
+import java.util.UUID;
 
 /**
  * Fragment
@@ -35,7 +38,9 @@ public class CrimeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        mCrime = new Crime();
+        UUID crimeUUID = (UUID) getActivity().getIntent()
+                .getSerializableExtra(JobCollisions.EXTRA_CRIME_ID);
+        mCrime = CrimeLab.getCrimeLab(getActivity()).getCrime(crimeUUID);
     }
 
     /***
@@ -50,6 +55,7 @@ public class CrimeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =inflater.inflate(R.layout.fragment_crime, container,false);
         mEditText = (EditText) view.findViewById(R.id.crime_title);
+        mEditText.setText(mCrime.getTitle());
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -64,6 +70,7 @@ public class CrimeFragment extends Fragment {
         mDateButton.setText(dateFormat.format(mCrime.getDate()));
         mDateButton.setEnabled(false); //TODO разлочить после обвеса событием
         mSolvedCheckBox = (CheckBox) view.findViewById(R.id.crime_solved);
+        mSolvedCheckBox.setChecked(mCrime.isSolved());
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
