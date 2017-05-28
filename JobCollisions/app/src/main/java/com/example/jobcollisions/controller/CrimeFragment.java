@@ -35,7 +35,6 @@ public class CrimeFragment extends Fragment {
     private EditText mEditText;
     private CheckBox mSolvedCheckBox;
     private Button mDateButton;
-    private static boolean isChecked;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -89,8 +88,7 @@ public class CrimeFragment extends Fragment {
         mSolvedCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isChecked = mSolvedCheckBox.isChecked();
-                mSolvedCheckBox.setChecked(isChecked);
+                mSolvedCheckBox.setChecked(mSolvedCheckBox.isChecked());
             }
         });
         return view;
