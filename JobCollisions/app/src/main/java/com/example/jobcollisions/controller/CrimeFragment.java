@@ -79,12 +79,6 @@ public class CrimeFragment extends Fragment {
         mDateButton.setEnabled(false); //TODO разлочить после обвеса событием
         mSolvedCheckBox = (CheckBox) view.findViewById(R.id.crime_solved);
         mSolvedCheckBox.setChecked(mCrime.isSolved());
-        //mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-        //    @Override
-         //   public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-          //      mSolvedCheckBox.setChecked(isChecked);
-           // }
-        //});
         mSolvedCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
