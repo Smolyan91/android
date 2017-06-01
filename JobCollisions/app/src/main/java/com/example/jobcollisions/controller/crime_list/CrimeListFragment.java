@@ -54,7 +54,8 @@ public class CrimeListFragment extends Fragment{
         updateUI(mCurrentPosition);
     }
 
-    public class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class CrimeHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener{
 
         private SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM d, yyyy");
         private Crime mCrime;
