@@ -11,10 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.jobcollisions.JobCollisions;
 import com.example.jobcollisions.R;
+import com.example.jobcollisions.controller.CrimePagerActivity;
 import com.example.jobcollisions.model.Crime;
 import com.example.jobcollisions.model.CrimeLab;
 
@@ -81,7 +80,7 @@ public class CrimeListFragment extends Fragment{
         @Override
         public void onClick(View v) {
             mCurrentPosition = getAdapterPosition();
-            Intent intent = JobCollisions.newIntent(getActivity(),mCrime.getId());
+            Intent intent = CrimePagerActivity.newIntent(getActivity(),mCrime.getId());
             startActivity(intent);
         }
     }
