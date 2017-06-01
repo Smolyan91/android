@@ -48,6 +48,15 @@ public class CrimePagerActivity extends FragmentActivity {
                 return mCrimes.size();
             }
         });
+
+        //Перебираем все id  для поиска того, который был нажат, чтоб скролл начать с него,
+        //а не с первого
+        for (int i = 0; i < mCrimes.size(); i++) {
+            if (mCrimes.get(i).getId().equals(crimeId)){
+                mViewPager.setCurrentItem(i);
+                break;
+            }
+        }
     }
 
     public static Intent newIntent(Context packageContext, UUID id){
