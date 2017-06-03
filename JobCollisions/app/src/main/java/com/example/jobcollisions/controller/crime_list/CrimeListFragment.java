@@ -58,23 +58,27 @@ public class CrimeListFragment extends Fragment{
             implements View.OnClickListener{
 
         private SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM d, yyyy");
+        private SimpleDateFormat timeFormat = new SimpleDateFormat("HH : mm");
         private Crime mCrime;
         private TextView mTitleTextView;
         private TextView mDateTextView;
+        private TextView mTimeTextView;
         private CheckBox mSolvedCheckBox;
 
 
         public CrimeHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            mTitleTextView  =  (TextView) itemView.findViewById(R.id.list_item_crime_title_text_view);
-            mDateTextView   =  (TextView) itemView.findViewById(R.id.list_item_date_text_view);
+            mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_crime_title_text_view);
+            mDateTextView = (TextView) itemView.findViewById(R.id.list_item_date_text_view);
+            mTimeTextView = (TextView) itemView.findViewById(R.id.list_item_crime_time);
             mSolvedCheckBox = (CheckBox)  itemView.findViewById(R.id.list_item_crime_solved_check_box);
         }
         public void bindCrime(Crime crime){
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
             mDateTextView.setText(dateFormat.format(mCrime.getDate()));
+            mTimeTextView.setText(timeFormat.format(mCrime.getDate()));
             mSolvedCheckBox.setChecked(mCrime.isSolved());
         }
 
