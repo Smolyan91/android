@@ -1,5 +1,7 @@
 package com.example.jobcollisions.controller;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +21,7 @@ import com.example.jobcollisions.model.Crime;
 import com.example.jobcollisions.model.CrimeLab;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -30,6 +33,8 @@ public class CrimeFragment extends Fragment {
 
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
+
+    private final int REQUEST_DATE = 0;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM d, yyyy");
     private Crime mCrime;
@@ -52,6 +57,22 @@ public class CrimeFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) return;
+
+        if (requestCode == REQUEST_DATE){
+            Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            mCrime.setDate(date);
+            updateTextDateOnButton(date);
+        }
+    }
+
+    private void updateTextDateOnButton(Date date) {
+        mDateButton.setText(dateFormat.format(date));
+    }
+
     /***
      * false -нужно ли вкл заполненное предст в родителя
      * @param inflater
@@ -77,13 +98,14 @@ public class CrimeFragment extends Fragment {
         });
 
         mDateButton = (Button) view.findViewById(R.id.crime_date);
-        mDateButton.setText(dateFormat.format(mCrime.getDate()));
+        updateTextDateOnButton(mCrime.getDate());
         //при нажатии выводим AlertDialog с выбором даты
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
-                DatePickerFragment dialog = new DatePickerFragment();
+                DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
                 dialog.show(fragmentManager,DIALOG_DATE);
             }
         });
