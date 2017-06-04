@@ -141,7 +141,8 @@ public class CrimeFragment extends Fragment {
         mSolvedCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSolvedCheckBox.setChecked(mSolvedCheckBox.isChecked());
+                mCrime.setSolved(mSolvedCheckBox.isChecked());
+                mSolvedCheckBox.setChecked(mCrime.isSolved());
             }
         });
         return view;
