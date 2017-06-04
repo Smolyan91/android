@@ -9,9 +9,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 
 import com.example.jobcollisions.R;
+import com.example.jobcollisions.controller.crime_list.CrimeListFragment;
 import com.example.jobcollisions.model.Crime;
 import com.example.jobcollisions.model.CrimeLab;
 
@@ -25,12 +29,34 @@ public class CrimePagerActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private List<Crime> mCrimes;
+    private int positionCrime;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.crime_fragment_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item_delete_crime:{
+                CrimeLab crimes = CrimeLab.getCrimeLab(this);
+                crimes.removeCrime(mCrimes.get(positionCrime).getId());
+                //устанавливаем флаг для обновления списка в CrimeListFragment
+                CrimeListFragment.flag = true;
+                this.finish();
+                return true;
+            }
+            default: return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedBundleInstanceState){
         super.onCreate(savedBundleInstanceState);
         setContentView(R.layout.activity_crime_pager);
-
         mViewPager = (ViewPager) findViewById(R.id.activity_crime_pager_view_pager);
         mCrimes = CrimeLab.getCrimeLab(this).getCrimeList();
 
@@ -41,6 +67,7 @@ public class CrimePagerActivity extends AppCompatActivity {
             @Override
             public Fragment getItem(int position) {
                 Crime crime = mCrimes.get(position);
+                positionCrime = position;
                 return CrimeFragment.newInstance(crime.getId());
             }
 

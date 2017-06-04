@@ -9,6 +9,9 @@ import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -147,4 +150,16 @@ public class CrimeFragment extends Fragment {
         });
         return view;
     }
+
+   /* @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item_delete_crime:
+                CrimeLab crimes = CrimeLab.getCrimeLab(getActivity());
+                crimes.removeCrime(mCrime.getId());
+                getActivity().finish();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }*/
 }

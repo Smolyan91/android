@@ -2,6 +2,7 @@ package com.example.jobcollisions.model;
 
 import android.content.Context;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +31,17 @@ public class CrimeLab {
 
     public void addCrime(Crime newCrime){
         this.crimeList.add(newCrime);
+    }
+
+    public void removeCrime(UUID id){
+        Iterator<Crime> i = crimeList.iterator();
+        while (i.hasNext()){
+            Crime crime = i.next();
+            if(crime.getId().equals(id)){
+                i.remove();
+                return;
+            }
+        }
     }
 
     public List<Crime> getCrimeList() {
