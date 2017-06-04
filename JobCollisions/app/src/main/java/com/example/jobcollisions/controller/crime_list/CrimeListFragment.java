@@ -62,6 +62,11 @@ public class CrimeListFragment extends Fragment{
         inflater.inflate(R.menu.crime_fragment_list, menu);
     }
 
+    /***
+     * Реагирует на нажатие пункта в меню
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
