@@ -30,6 +30,7 @@ public class CrimeListFragment extends Fragment{
     private CrimeAdapter mAdapter;
     private int mCurrentPosition;
     private boolean mSubtitleVisible;
+    public static boolean flag;
 
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
 
@@ -44,6 +45,8 @@ public class CrimeListFragment extends Fragment{
         mRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         updateUI(mCurrentPosition);
+        mAdapter.notifyDataSetChanged();
+
         return view;
     }
 
@@ -53,16 +56,20 @@ public class CrimeListFragment extends Fragment{
         outState.putBoolean(SAVED_SUBTITLE_VISIBLE, mSubtitleVisible);
     }
 
-    private void updateUI(int position){
+    public void updateUI(int position){
         CrimeLab crimeLab = CrimeLab.getCrimeLab(getContext());
         List<Crime> crimes = crimeLab.getCrimeList();
         if (mAdapter == null) {
             mAdapter = new CrimeAdapter(crimes);
             mRecyclerView.setAdapter(mAdapter);
+        }else if (flag){
+            //если в CrimePagerActivity был удален элемент, то flag будет установлен
+            mAdapter.notifyItemRemoved(position);
         }else {
-            mAdapter.notifyItemChanged(position);
+           // mAdapter.notifyDataSetChanged();
         }
         updateSubtitle();
+        flag = false;
     }
 
     /***
@@ -149,9 +156,9 @@ public class CrimeListFragment extends Fragment{
             mTimeTextView = (TextView) itemView.findViewById(R.id.list_item_crime_time);
             mSolvedCheckBox = (CheckBox)  itemView.findViewById(R.id.list_item_crime_solved_check_box);
         }
-        public void bindCrime(Crime crime){
+        public void bindCrime(Crime crime, int p){
             mCrime = crime;
-            mTitleTextView.setText(mCrime.getTitle());
+            mTitleTextView.setText(mCrime.getTitle() + " => " + p);
             mDateTextView.setText(dateFormat.format(mCrime.getDate()));
             mTimeTextView.setText(timeFormat.format(mCrime.getDate()));
             mSolvedCheckBox.setChecked(mCrime.isSolved());
@@ -203,7 +210,7 @@ public class CrimeListFragment extends Fragment{
         @Override
         public void onBindViewHolder(CrimeHolder holder, int position) {
             Crime crime = mCrimes.get(position);
-            holder.bindCrime(crime);
+            holder.bindCrime(crime, position);
         }
 
         @Override
