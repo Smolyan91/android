@@ -19,14 +19,12 @@ import java.util.UUID;
 public class CrimeLab {
 
     private static CrimeLab sCrimeLab;
-    private List<Crime> crimeList;
     private Context context;
     private SQLiteDatabase sqLiteDatabase;
 
     private CrimeLab(Context context){
         context = context.getApplicationContext();
         sqLiteDatabase = new CrimeBaseHelper(context).getWritableDatabase();
-        crimeList = new LinkedList<>();
     }
 
     public static CrimeLab getCrimeLab(Context context) {
@@ -37,30 +35,16 @@ public class CrimeLab {
     }
 
     public void addCrime(Crime newCrime){
-        this.crimeList.add(newCrime);
     }
 
     public void removeCrime(UUID id){
-        Iterator<Crime> i = crimeList.iterator();
-        while (i.hasNext()){
-            Crime crime = i.next();
-            if(crime.getId().equals(id)){
-                i.remove();
-                return;
-            }
-        }
     }
 
     public List<Crime> getCrimeList() {
-        return crimeList;
+        return new LinkedList<>();
     }
 
     public Crime getCrime(UUID id){
-        for (Crime crime :  crimeList){
-            if (crime.getId().equals(id)){
-                return crime;
-            }
-        }
         return null;
     }
 }
