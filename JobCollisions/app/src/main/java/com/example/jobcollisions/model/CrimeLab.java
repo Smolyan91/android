@@ -1,6 +1,9 @@
 package com.example.jobcollisions.model;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.example.jobcollisions.database.CrimeBaseHelper;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -17,8 +20,12 @@ public class CrimeLab {
 
     private static CrimeLab sCrimeLab;
     private List<Crime> crimeList;
+    private Context context;
+    private SQLiteDatabase sqLiteDatabase;
 
     private CrimeLab(Context context){
+        context = context.getApplicationContext();
+        sqLiteDatabase = new CrimeBaseHelper(context).getWritableDatabase();
         crimeList = new LinkedList<>();
     }
 
