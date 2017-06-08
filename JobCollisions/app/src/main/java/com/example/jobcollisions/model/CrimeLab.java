@@ -3,9 +3,11 @@ package com.example.jobcollisions.model;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.jobcollisions.database.CrimeBaseHelper;
+import com.example.jobcollisions.database.CrimeCursorWrapper;
 import com.example.jobcollisions.database.CrimeDBSchema.CrimeTable;
 
 import java.util.LinkedList;
@@ -21,12 +23,12 @@ import java.util.UUID;
 public class CrimeLab {
 
     private static CrimeLab sCrimeLab;
-    private Context context;
+    private Context mContext;
     private SQLiteDatabase sqLiteDatabase;
 
     private CrimeLab(Context context){
-        context = context.getApplicationContext();
-        sqLiteDatabase = new CrimeBaseHelper(context).getWritableDatabase();
+        mContext = context.getApplicationContext();
+        sqLiteDatabase = new CrimeBaseHelper(mContext).getWritableDatabase();
     }
 
     public static CrimeLab getCrimeLab(Context context) {
@@ -71,7 +73,7 @@ public class CrimeLab {
      * @param whereArgs
      * @return
      */
-    private Cursor queryDataCrime(String whereCls, String[] whereArgs){
+    private CrimeCursorWrapper queryDataCrime(String whereCls, String[] whereArgs){
         Cursor cursor = sqLiteDatabase.query(
                 CrimeTable.NAME,
                 null, //Columns = null выбирает все столбцы
@@ -81,18 +83,42 @@ public class CrimeLab {
                 null, //having
                 null  //orderBy
         );
-        return cursor;
+        return new CrimeCursorWrapper(cursor);
     }
 
     public void removeCrime(UUID id){
     }
 
     public List<Crime> getCrimeList() {
-        return new LinkedList<>();
+        List<Crime> crimes = new LinkedList<>();
+        CrimeCursorWrapper cursor = queryDataCrime(null, null);
+        try{
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()){
+                crimes.add(cursor.getCrime());
+                cursor.moveToNext();
+            }
+        }finally {
+            cursor.close();
+        }
+
+        return crimes;
     }
 
     public Crime getCrime(UUID id){
-        return null;
+        CrimeCursorWrapper cursor = queryDataCrime(
+                CrimeTable.Columns.UUID + " = ?",
+                new String[]{id.toString()}
+        );
+        try {
+            if (cursor.getCount() == 0){
+                return  null;
+            }
+            cursor.moveToFirst();
+            return cursor.getCrime();
+        }finally {
+            cursor.close();
+        }
     }
 
     private static ContentValues getContentValues(Crime crime){

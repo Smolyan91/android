@@ -30,7 +30,7 @@ public class CrimeListFragment extends Fragment{
     private CrimeAdapter mAdapter;
     private int mCurrentPosition;
     private boolean mSubtitleVisible;
-    public static boolean flag;
+
 
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
 
@@ -62,14 +62,13 @@ public class CrimeListFragment extends Fragment{
         if (mAdapter == null) {
             mAdapter = new CrimeAdapter(crimes);
             mRecyclerView.setAdapter(mAdapter);
-        }else if (flag){
-            //если в CrimePagerActivity был удален элемент, то flag будет установлен
-            mAdapter.notifyItemRemoved(position);
-        }else {
-           // mAdapter.notifyDataSetChanged();
+        }else{
+            mAdapter.setCrimes(crimes);
+            mAdapter.notifyDataSetChanged();
         }
+            //если в CrimePagerActivity был удален элемент, то flag будет установлен
+            //mAdapter.notifyItemRemoved(position);
         updateSubtitle();
-        flag = false;
     }
 
     /***
@@ -221,6 +220,10 @@ public class CrimeListFragment extends Fragment{
         @Override
         public void onAttachedToRecyclerView(RecyclerView recyclerView) {
             super.onAttachedToRecyclerView(recyclerView);
+        }
+
+        public void setCrimes(List<Crime> mCrimes) {
+            this.mCrimes = mCrimes;
         }
     }
 }

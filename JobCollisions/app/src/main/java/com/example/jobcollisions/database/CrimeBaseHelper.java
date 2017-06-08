@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class CrimeBaseHelper extends SQLiteOpenHelper {
 
     public static final int VERSION = 1;
-    public static final String DATABASE_NAME = "crime_db";
+    public static final String DATABASE_NAME = "crime.db";
 
     public CrimeBaseHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);

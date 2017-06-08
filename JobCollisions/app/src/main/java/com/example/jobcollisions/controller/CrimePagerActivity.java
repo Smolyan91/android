@@ -45,7 +45,6 @@ public class CrimePagerActivity extends AppCompatActivity {
                 CrimeLab crimes = CrimeLab.getCrimeLab(this);
                 crimes.removeCrime(mCrimes.get(positionCrime).getId());
                 //устанавливаем флаг для обновления списка в CrimeListFragment
-                CrimeListFragment.flag = true;
                 this.finish();
                 return true;
             }
