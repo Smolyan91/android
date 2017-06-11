@@ -1,7 +1,16 @@
 package com.example.jobcollisions.model;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.CursorWrapper;
+import android.database.sqlite.SQLiteDatabase;
 
+import com.example.jobcollisions.database.CrimeBaseHelper;
+import com.example.jobcollisions.database.CrimeCursorWrapper;
+import com.example.jobcollisions.database.CrimeDBSchema;
+
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,10 +25,12 @@ import java.util.UUID;
 public class CrimeLab {
 
     private static CrimeLab sCrimeLab;
-    private List<Crime> crimeList;
+    private Context mContext;
+    private SQLiteDatabase sqLiteDatabase;
 
     private CrimeLab(Context context){
-        crimeList = new LinkedList<>();
+        mContext = context.getApplicationContext();
+        sqLiteDatabase = new CrimeBaseHelper(mContext).getWritableDatabase();
     }
 
     public static CrimeLab getCrimeLab(Context context) {
@@ -30,10 +41,32 @@ public class CrimeLab {
     }
 
     public void addCrime(Crime newCrime){
-        this.crimeList.add(newCrime);
+        ContentValues contentValues = getContentValues(newCrime);
+        sqLiteDatabase.insert(CrimeDBSchema.CrimeTable.NAME, null, contentValues);
     }
 
-    public void removeCrime(UUID id){
+    public void updateCrime(Crime crime){
+        String uuidString = crime.getId().toString();
+        ContentValues contentValues = getContentValues(crime);
+        sqLiteDatabase.update(CrimeDBSchema.CrimeTable.NAME,
+                contentValues, CrimeDBSchema.CrimeTable.Columns.UUID + " =?",
+                new String[]{uuidString});
+    }
+
+    private CrimeCursorWrapper queryCrimes(String whereClause, String[] whereArgs){
+        Cursor cursor = sqLiteDatabase.query(
+                CrimeDBSchema.CrimeTable.NAME,
+                null,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null
+        );
+        return new CrimeCursorWrapper(cursor);
+    }
+
+    /*public void removeCrime(UUID id){
         Iterator<Crime> i = crimeList.iterator();
         while (i.hasNext()){
             Crime crime = i.next();
@@ -42,18 +75,51 @@ public class CrimeLab {
                 return;
             }
         }
-    }
+    }*/
 
     public List<Crime> getCrimeList() {
-        return crimeList;
+        List<Crime> crimes = new ArrayList<>();
+        CrimeCursorWrapper cursorWrapper = queryCrimes(null, null);
+
+        try {
+            cursorWrapper.moveToFirst();
+            while (!cursorWrapper.isAfterLast()){
+                crimes.add(cursorWrapper.getCrime());
+                cursorWrapper.moveToNext();
+            }
+        }finally {
+            cursorWrapper.close();
+        }
+        return crimes;
     }
 
+    /***
+     * возвращает только первый элемент
+     * @param id
+     * @return
+     */
     public Crime getCrime(UUID id){
-        for (Crime crime :  crimeList){
-            if (crime.getId().equals(id)){
-                return crime;
+        CrimeCursorWrapper crimeCursorWrapper = queryCrimes(
+                CrimeDBSchema.CrimeTable.Columns.UUID + " =?",
+                new String[]{id.toString()}
+        );
+        try {
+            if (crimeCursorWrapper.getCount() == 0){
+                return null;
             }
+            crimeCursorWrapper.moveToFirst();
+            return crimeCursorWrapper.getCrime();
+        }finally {
+            crimeCursorWrapper.close();
         }
-        return null;
+    }
+
+    private static ContentValues getContentValues(Crime crime){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CrimeDBSchema.CrimeTable.Columns.UUID, crime.getId().toString());
+        contentValues.put(CrimeDBSchema.CrimeTable.Columns.TITLE, crime.getTitle());
+        contentValues.put(CrimeDBSchema.CrimeTable.Columns.DATE, crime.getDate().getTime());
+        contentValues.put(CrimeDBSchema.CrimeTable.Columns.SOLVED, crime.isSolved()?  1:0);
+        return contentValues;
     }
 }

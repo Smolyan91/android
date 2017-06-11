@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/home/igor/projects/android/ControlState/app/build/intermediates/res/merged/debug/color-v11/abc_background_cache_hint_selector_material_light.xml",
+        "source": "/home/igor/.android/build-cache/417a15c35a95d98f8dc1429e141191373e23295a/output/res/color-v11/abc_background_cache_hint_selector_material_light.xml"
+    },
+    {
+        "merged": "/home/igor/projects/android/ControlState/app/build/intermediates/res/merged/debug/color-v11/abc_background_cache_hint_selector_material_dark.xml",
+        "source": "/home/igor/.android/build-cache/417a15c35a95d98f8dc1429e141191373e23295a/output/res/color-v11/abc_background_cache_hint_selector_material_dark.xml"
+    }
+]

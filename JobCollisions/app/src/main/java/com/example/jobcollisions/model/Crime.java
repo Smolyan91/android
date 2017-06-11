@@ -11,19 +11,23 @@ import java.util.UUID;
 
 public class Crime {
 
-    private UUID id;
+    private UUID mId;
     private String mTitle;
     private Date mDate; // date crime
     private boolean isSolved; // solved crime ?
 
     public Crime(){
         //generate unique id
-        id = UUID.randomUUID();
+        this(UUID.randomUUID());
+    }
+
+    public Crime(UUID id){
+        mId = id;
         mDate = new Date();
     }
 
     public UUID getId() {
-        return id;
+        return mId;
     }
 
     public String getTitle() {
