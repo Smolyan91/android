@@ -9,13 +9,16 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * Для повышения уровня абстракции при извлечении данных из БД
- * Cursor делает это на низком уровне и код по извлечению много раз дублируется
- * Данный слой доступа к данным(DAO CrimeCursorWrapper) позволяет использовать
- * дополнительно созданные методы для доступа к данным
+ * Created by igor on 11.06.17.
  */
 
-public class CrimeCursorWrapper extends CursorWrapper {
+public class CrimeCursorWrapper extends CursorWrapper{
+
+    /**
+     * Creates a cursor wrapper.
+     *
+     * @param cursor The underlying cursor to wrap.
+     */
 
     public CrimeCursorWrapper(Cursor cursor) {
         super(cursor);
@@ -23,13 +26,14 @@ public class CrimeCursorWrapper extends CursorWrapper {
 
     public Crime getCrime(){
         String uuidString = getString(getColumnIndex(CrimeDBSchema.CrimeTable.Columns.UUID));
-        String title = getString(getColumnIndex(CrimeDBSchema.CrimeTable.Columns.TITLE));
-        long date = getLong(getColumnIndex(CrimeDBSchema.CrimeTable.Columns.DATE));
-        int isSolved = getInt(getColumnIndex(CrimeDBSchema.CrimeTable.Columns.SOLVED));
+        String title      = getString(getColumnIndex(CrimeDBSchema.CrimeTable.Columns.TITLE));
+        long date         = getLong  (getColumnIndex(CrimeDBSchema.CrimeTable.Columns.DATE));
+        int isSolved      = getInt   (getColumnIndex(CrimeDBSchema.CrimeTable.Columns.SOLVED));
+
         Crime crime = new Crime(UUID.fromString(uuidString));
         crime.setTitle(title);
         crime.setDate(new Date(date));
-        crime.setSolved(isSolved != 0   );
+        crime.setSolved(isSolved == 1);
         return crime;
     }
 }

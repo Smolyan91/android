@@ -18,8 +18,8 @@ public class Crime {
 
 
     public Crime(){
+        //generate unique id
         this(UUID.randomUUID());
-        mTitle = "";
     }
 
     public Crime(UUID id){

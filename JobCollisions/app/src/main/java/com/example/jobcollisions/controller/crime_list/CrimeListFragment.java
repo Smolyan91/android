@@ -31,7 +31,6 @@ public class CrimeListFragment extends Fragment{
     private int mCurrentPosition;
     private boolean mSubtitleVisible;
 
-
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
 
     @Nullable
@@ -62,10 +61,10 @@ public class CrimeListFragment extends Fragment{
         if (mAdapter == null) {
             mAdapter = new CrimeAdapter(crimes);
             mRecyclerView.setAdapter(mAdapter);
-        }else{
+        }else {
             mAdapter.setCrimes(crimes);
-            mAdapter.notifyDataSetChanged();
-        }
+            mAdapter.notifyItemRemoved(position);
+
             //если в CrimePagerActivity был удален элемент, то flag будет установлен
             //mAdapter.notifyItemRemoved(position);
         updateSubtitle();
@@ -155,9 +154,9 @@ public class CrimeListFragment extends Fragment{
             mTimeTextView = (TextView) itemView.findViewById(R.id.list_item_crime_time);
             mSolvedCheckBox = (CheckBox)  itemView.findViewById(R.id.list_item_crime_solved_check_box);
         }
-        public void bindCrime(Crime crime, int p){
+        public void bindCrime(Crime crime ){
             mCrime = crime;
-            mTitleTextView.setText(mCrime.getTitle() + " => " + p);
+            mTitleTextView.setText(mCrime.getTitle());
             mDateTextView.setText(dateFormat.format(mCrime.getDate()));
             mTimeTextView.setText(timeFormat.format(mCrime.getDate()));
             mSolvedCheckBox.setChecked(mCrime.isSolved());
@@ -209,12 +208,16 @@ public class CrimeListFragment extends Fragment{
         @Override
         public void onBindViewHolder(CrimeHolder holder, int position) {
             Crime crime = mCrimes.get(position);
-            holder.bindCrime(crime, position);
+            holder.bindCrime(crime);
         }
 
         @Override
         public int getItemCount() {
             return mCrimes.size();
+        }
+
+        public void setCrimes(List<Crime> crimes){
+            mCrimes = crimes;
         }
 
         @Override

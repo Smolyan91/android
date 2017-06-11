@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/home/igor/projects/android/ControlState/app/build/intermediates/res/merged/debug/drawable-v21/abc_edit_text_material.xml",
+        "source": "/home/igor/.android/build-cache/417a15c35a95d98f8dc1429e141191373e23295a/output/res/drawable-v21/abc_edit_text_material.xml"
+    },
+    {
+        "merged": "/home/igor/projects/android/ControlState/app/build/intermediates/res/merged/debug/drawable-v21/notification_action_background.xml",
+        "source": "/home/igor/.android/build-cache/417a15c35a95d98f8dc1429e141191373e23295a/output/res/drawable-v21/notification_action_background.xml"
+    },
+    {
+        "merged": "/home/igor/projects/android/ControlState/app/build/intermediates/res/merged/debug/drawable-v21/abc_btn_colored_material.xml",
+        "source": "/home/igor/.android/build-cache/417a15c35a95d98f8dc1429e141191373e23295a/output/res/drawable-v21/abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "/home/igor/projects/android/ControlState/app/build/intermediates/res/merged/debug/drawable-v21/abc_action_bar_item_background_material.xml",
+        "source": "/home/igor/.android/build-cache/417a15c35a95d98f8dc1429e141191373e23295a/output/res/drawable-v21/abc_action_bar_item_background_material.xml"
+    }
+]
