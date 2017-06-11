@@ -86,6 +86,7 @@ public class CrimeListFragment extends Fragment{
         }
     }
 
+    
     public void updateSubtitle(){
         CrimeLab crimeLab = CrimeLab.getCrimeLab(getActivity());
         int countCrime = crimeLab.getCrimeList().size();
