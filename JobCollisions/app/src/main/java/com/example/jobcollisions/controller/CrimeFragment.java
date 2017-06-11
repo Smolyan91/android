@@ -73,15 +73,6 @@ public class CrimeFragment extends Fragment {
         return fragment;
     }
 
-    /***
-     * По завершению CrimeFragment данные пуляются в БД
-     */
-    @Override
-    public void onPause(){
-        super.onPause();
-        CrimeLab.getCrimeLab(getActivity()).updateCrime(mCrime);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) return;
@@ -166,4 +157,16 @@ public class CrimeFragment extends Fragment {
         });
         return view;
     }
+
+   /* @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item_delete_crime:
+                CrimeLab crimes = CrimeLab.getCrimeLab(getActivity());
+                crimes.removeCrime(mCrime.getId());
+                getActivity().finish();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }*/
 }
