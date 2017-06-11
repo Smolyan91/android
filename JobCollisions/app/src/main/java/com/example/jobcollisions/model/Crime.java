@@ -16,6 +16,7 @@ public class Crime {
     private Date mDate; // date crime
     private boolean isSolved; // solved crime ?
 
+
     public Crime(){
         //generate unique id
         this(UUID.randomUUID());

@@ -64,7 +64,9 @@ public class CrimeListFragment extends Fragment{
         }else {
             mAdapter.setCrimes(crimes);
             mAdapter.notifyItemRemoved(position);
-        }
+
+            //если в CrimePagerActivity был удален элемент, то flag будет установлен
+            //mAdapter.notifyItemRemoved(position);
         updateSubtitle();
     }
 
@@ -221,6 +223,10 @@ public class CrimeListFragment extends Fragment{
         @Override
         public void onAttachedToRecyclerView(RecyclerView recyclerView) {
             super.onAttachedToRecyclerView(recyclerView);
+        }
+
+        public void setCrimes(List<Crime> mCrimes) {
+            this.mCrimes = mCrimes;
         }
     }
 }

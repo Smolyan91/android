@@ -1,5 +1,6 @@
 package com.example.jobcollisions.database;
 
+
 /**
  * Created by igor on 11.06.17.
  */

@@ -3,6 +3,7 @@ package com.example.jobcollisions.model;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+
 import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -40,6 +41,10 @@ public class CrimeLab {
         return sCrimeLab;
     }
 
+    /***
+     * Выставка данных в базу
+     * @param newCrime
+     */
     public void addCrime(Crime newCrime){
         ContentValues contentValues = getContentValues(newCrime);
         sqLiteDatabase.insert(CrimeDBSchema.CrimeTable.NAME, null, contentValues);
@@ -99,6 +104,7 @@ public class CrimeLab {
      * @return
      */
     public Crime getCrime(UUID id){
+
         CrimeCursorWrapper crimeCursorWrapper = queryCrimes(
                 CrimeDBSchema.CrimeTable.Columns.UUID + " =?",
                 new String[]{id.toString()}

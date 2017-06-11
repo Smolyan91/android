@@ -19,6 +19,7 @@ public class CrimeCursorWrapper extends CursorWrapper{
      *
      * @param cursor The underlying cursor to wrap.
      */
+
     public CrimeCursorWrapper(Cursor cursor) {
         super(cursor);
     }
