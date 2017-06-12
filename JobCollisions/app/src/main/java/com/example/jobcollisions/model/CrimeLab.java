@@ -3,16 +3,10 @@ package com.example.jobcollisions.model;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-
-import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
-
 import com.example.jobcollisions.database.CrimeBaseHelper;
 import com.example.jobcollisions.database.CrimeCursorWrapper;
 import com.example.jobcollisions.database.CrimeDBSchema;
-
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -71,19 +65,15 @@ public class CrimeLab {
         return new CrimeCursorWrapper(cursor);
     }
 
-    /*public void removeCrime(UUID id){
-        Iterator<Crime> i = crimeList.iterator();
-        while (i.hasNext()){
-            Crime crime = i.next();
-            if(crime.getId().equals(id)){
-                i.remove();
-                return;
-            }
-        }
-    }*/
+    public void deleteCrime(Crime crime){
+        String idCrimeStringForDelete = crime.getId().toString();
+        sqLiteDatabase.delete(CrimeDBSchema.CrimeTable.NAME,
+                CrimeDBSchema.CrimeTable.Columns.UUID + " = ?",
+                new String[]{idCrimeStringForDelete});
+    }
 
     public List<Crime> getCrimeList() {
-        List<Crime> crimes = new ArrayList<>();
+        List<Crime> crimes = new LinkedList<>();
         CrimeCursorWrapper cursorWrapper = queryCrimes(null, null);
 
         try {

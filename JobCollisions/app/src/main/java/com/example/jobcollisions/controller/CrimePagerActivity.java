@@ -29,7 +29,7 @@ public class CrimePagerActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private List<Crime> mCrimes;
-    private int positionCrime;
+    private volatile int positionCrime;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -43,7 +43,7 @@ public class CrimePagerActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.menu_item_delete_crime:{
                 CrimeLab crimes = CrimeLab.getCrimeLab(this);
-               // crimes.removeCrime(mCrimes.get(positionCrime).getId());
+                crimes.deleteCrime(mCrimes.get(positionCrime));
                 //устанавливаем флаг для обновления списка в CrimeListFragment
                 this.finish();
                 return true;
