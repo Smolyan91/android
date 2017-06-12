@@ -71,16 +71,12 @@ public class CrimeLab {
         return new CrimeCursorWrapper(cursor);
     }
 
-    /*public void removeCrime(UUID id){
-        Iterator<Crime> i = crimeList.iterator();
-        while (i.hasNext()){
-            Crime crime = i.next();
-            if(crime.getId().equals(id)){
-                i.remove();
-                return;
-            }
-        }
-    }*/
+    public void deleteCrime(Crime crime){
+        String idCrimeStringForDelete = crime.getId().toString();
+        sqLiteDatabase.delete(CrimeDBSchema.CrimeTable.NAME,
+                CrimeDBSchema.CrimeTable.Columns.UUID + " = ?",
+                new String[]{idCrimeStringForDelete});
+    }
 
     public List<Crime> getCrimeList() {
         List<Crime> crimes = new ArrayList<>();

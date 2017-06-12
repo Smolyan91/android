@@ -4,11 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-
-/**
- * Created by igor on 11.06.17.
- */
-
 public class CrimeBaseHelper extends SQLiteOpenHelper {
 
     private static final int VERSION = 1;
@@ -28,8 +23,6 @@ public class CrimeBaseHelper extends SQLiteOpenHelper {
         CrimeDBSchema.CrimeTable.Columns.DATE + ", " +
         CrimeDBSchema.CrimeTable.Columns.SOLVED + " )"
         );
-
-
     }
 
     @Override
