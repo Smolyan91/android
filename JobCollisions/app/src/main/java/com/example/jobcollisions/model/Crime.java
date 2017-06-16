@@ -15,7 +15,15 @@ public class Crime {
     private String mTitle;
     private Date mDate; // date crime
     private boolean isSolved; // solved crime ?
+    private String mSuspectName;
 
+    public String getSuspectName() {
+        return mSuspectName;
+    }
+
+    public void setSuspectName(String mSuspectName) {
+        this.mSuspectName = mSuspectName;
+    }
 
     public Crime(){
         //generate unique id
