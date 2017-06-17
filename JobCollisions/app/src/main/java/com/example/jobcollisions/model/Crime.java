@@ -17,6 +17,16 @@ public class Crime {
     private boolean isSolved; // solved crime ?
     private String mSuspectName;
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    private String phoneNumber;
+
     public String getSuspectName() {
         return mSuspectName;
     }

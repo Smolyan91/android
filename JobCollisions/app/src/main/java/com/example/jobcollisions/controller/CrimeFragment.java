@@ -64,6 +64,7 @@ public class CrimeFragment extends Fragment {
     private Button mTimeButton;
     private Button mReportButton;
     private Button mRequestContactButton;
+    private Button mPhoneButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -104,6 +105,7 @@ public class CrimeFragment extends Fragment {
         return getString(R.string.crime_report, mCrime.getTitle(),
                 date, solvedString, suspect);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) return;
@@ -132,8 +134,6 @@ public class CrimeFragment extends Fragment {
             try {
                 if (cursor.getCount() == 0) return;
                 cursor.moveToFirst();
-                String name = cursor.getString(cursor.getColumnIndex
-                                (ContactsContract.Contacts.DISPLAY_NAME));
                 String cont_id = cursor.getString(cursor.getColumnIndex
                                 (ContactsContract.Contacts._ID));
                 String hasPhone = cursor.getString(cursor.getColumnIndex
@@ -162,6 +162,7 @@ public class CrimeFragment extends Fragment {
                 }
                 String nameSuspect = cursor.getString(0);
                 mCrime.setSuspectName(nameSuspect);
+                mCrime.setPhoneNumber(phoneNumber);
                 mRequestContactButton.setText(nameSuspect);
             }finally {
                 cursor.close();
@@ -254,11 +255,25 @@ public class CrimeFragment extends Fragment {
         if (packageManager.resolveActivity(intentPick, PackageManager.MATCH_DEFAULT_ONLY) == null){
             mRequestContactButton.setEnabled(false);
         }
+        //Кнопка получения контакта
         mRequestContactButton = (Button) view.findViewById(R.id.crime_suspect);
+        if (mCrime.getSuspectName() != null) {
+            mRequestContactButton.setText(mCrime.getSuspectName());
+        }
         mRequestContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivityForResult(intentPick, REQUEST_CONTACT);
+            }
+        });
+        //Кнопка звонка
+        mPhoneButton = (Button) view.findViewById(R.id.call_to_men);
+        mPhoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_CALL,
+                        Uri.parse("tel:" + mCrime.getPhoneNumber()));
+                startActivity(intent);
             }
         });
         return view;
