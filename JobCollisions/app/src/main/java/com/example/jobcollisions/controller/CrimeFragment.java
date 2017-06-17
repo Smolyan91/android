@@ -12,10 +12,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -43,7 +41,11 @@ public class CrimeFragment extends Fragment {
     private static final String CONTACT_ID = ContactsContract.Contacts._ID;
     private static final String DISPLAY_NAME = ContactsContract.Contacts.DISPLAY_NAME;
     private static final String HAS_PHONE_NUMBER = ContactsContract.Contacts.HAS_PHONE_NUMBER;
-    //........
+    private static final String PHONE_NUMBER = ContactsContract.CommonDataKinds.Phone.NUMBER;
+    private static final String PHONE_CONTACT_ID = ContactsContract.CommonDataKinds.Phone.CONTACT_ID;
+
+    //For debug LogCat
+    public static final String MSG = "MSG ";
 
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
@@ -62,6 +64,7 @@ public class CrimeFragment extends Fragment {
     private Button mTimeButton;
     private Button mReportButton;
     private Button mRequestContactButton;
+    private Button mPhoneButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -102,6 +105,7 @@ public class CrimeFragment extends Fragment {
         return getString(R.string.crime_report, mCrime.getTitle(),
                 date, solvedString, suspect);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) return;
@@ -116,18 +120,49 @@ public class CrimeFragment extends Fragment {
             mCrime.getDate().setMinutes(date.getMinutes());
             updateTextTimeOnButton(date);
         }else if (requestCode == REQUEST_CONTACT && data != null){
+
             Uri contactUri = data.getData();
-            String[] queryFields = new String[]{ContactsContract.Contacts.DISPLAY_NAME};
+            String[] queryFields = new String[]{
+                    DISPLAY_NAME,
+                    CONTACT_ID,
+                    HAS_PHONE_NUMBER
+            };
             Cursor cursor = getActivity().getContentResolver()
                     .query(contactUri, queryFields, null, null, null);
 
+            String phoneNumber = null;
             try {
-                if (cursor.getCount() == 0){
-                    return;
-                }
+                if (cursor.getCount() == 0) return;
                 cursor.moveToFirst();
+                String cont_id = cursor.getString(cursor.getColumnIndex
+                                (ContactsContract.Contacts._ID));
+                String hasPhone = cursor.getString(cursor.getColumnIndex
+                                (ContactsContract.Contacts.HAS_PHONE_NUMBER));
+
+                if (Integer.parseInt(hasPhone) > 0){
+                    Cursor cursorPhone = null;
+                    try {
+                        cursorPhone = getActivity().getContentResolver()
+                                .query(
+                                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                    null,
+                                    PHONE_CONTACT_ID + " = " + cont_id,
+                                    null,
+                                    null
+                        );
+                        while (cursorPhone.moveToNext()) {
+                            phoneNumber = cursorPhone.getString(cursorPhone
+                                            .getColumnIndex(PHONE_NUMBER));
+                            Log.i("MSG" , phoneNumber);
+                            if (phoneNumber != null) break;
+                        }
+                    }finally {
+                        cursorPhone.close();
+                    }
+                }
                 String nameSuspect = cursor.getString(0);
                 mCrime.setSuspectName(nameSuspect);
+                mCrime.setPhoneNumber(phoneNumber);
                 mRequestContactButton.setText(nameSuspect);
             }finally {
                 cursor.close();
@@ -220,11 +255,25 @@ public class CrimeFragment extends Fragment {
         if (packageManager.resolveActivity(intentPick, PackageManager.MATCH_DEFAULT_ONLY) == null){
             mRequestContactButton.setEnabled(false);
         }
+        //Кнопка получения контакта
         mRequestContactButton = (Button) view.findViewById(R.id.crime_suspect);
+        if (mCrime.getSuspectName() != null) {
+            mRequestContactButton.setText(mCrime.getSuspectName());
+        }
         mRequestContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivityForResult(intentPick, REQUEST_CONTACT);
+            }
+        });
+        //Кнопка звонка
+        mPhoneButton = (Button) view.findViewById(R.id.call_to_men);
+        mPhoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_CALL,
+                        Uri.parse("tel:" + mCrime.getPhoneNumber()));
+                startActivity(intent);
             }
         });
         return view;
