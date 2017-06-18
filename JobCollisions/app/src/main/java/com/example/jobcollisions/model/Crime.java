@@ -1,5 +1,7 @@
 package com.example.jobcollisions.model;
 
+import android.util.Log;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -21,6 +23,10 @@ public class Crime {
         return phoneNumber;
     }
 
+    public String getPhotoFileName(){
+        Log.i("getPFileName : ", "IMG_" + getId().toString() + ".jpg");
+        return "IMG_" + getId().toString() + ".jpg";
+    }
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }

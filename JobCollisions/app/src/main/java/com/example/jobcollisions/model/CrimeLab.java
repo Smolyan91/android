@@ -4,9 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
+
 import com.example.jobcollisions.database.CrimeBaseHelper;
 import com.example.jobcollisions.database.CrimeCursorWrapper;
 import com.example.jobcollisions.database.CrimeDBSchema;
+
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -108,6 +112,23 @@ public class CrimeLab {
         }finally {
             crimeCursorWrapper.close();
         }
+    }
+
+    /***
+     * Возвращает дескриптор папки в первичном внешнем храни-
+     * лище, предназначенной для хранения обычных файлов. При
+     * передаче типа String можно обратиться к папке, пред-
+     * назначенной для конкретного типа содержимого. Константы
+     * типов определяются в Environment с префиксом DIRECTORY_.
+     * Например, изображения хранятся в Environment.DIRECTORY_PICTURES
+     * @param crime
+     * @return
+     */
+    public File getPhotoFile(Crime crime){
+        File externalFilesDir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        if (externalFilesDir == null) return null;
+        return new File(externalFilesDir, crime.getPhotoFileName());
     }
 
     private static ContentValues getContentValues(Crime crime){
