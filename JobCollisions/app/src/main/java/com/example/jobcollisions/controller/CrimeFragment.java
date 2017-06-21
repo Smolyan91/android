@@ -23,6 +23,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.example.jobcollisions.R;
 import com.example.jobcollisions.controller.alert_dialog.DatePickerFragment;
@@ -77,6 +78,9 @@ public class CrimeFragment extends Fragment {
     private Button mPhoneButton;
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
+
+    // Flags and tmp_val
+    private static boolean isFullImage = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -327,6 +331,23 @@ public class CrimeFragment extends Fragment {
             public void onClick(View v) {
 
                 startActivityForResult(captureImg, REQUEST_PHOTO);
+            }
+        });
+
+        mPhotoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFullImage){
+                    isFullImage = false;
+                    mPhotoView.setLayoutParams(new LinearLayout.LayoutParams
+                            (LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    mPhotoView.setAdjustViewBounds(true);
+                }else {
+                    isFullImage = true;
+                    mPhotoView.setLayoutParams(new LinearLayout.LayoutParams
+                            (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                    mPhotoView.setScaleType(ImageView.ScaleType.FIT_XY);
+                }
             }
         });
         updatePhotoView();
