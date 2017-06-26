@@ -61,6 +61,7 @@ public class CrimeFragment extends Fragment {
     private static final int REQUEST_TIME = 1;
     private static final int REQUEST_CONTACT = 2;
     private static final int REQUEST_PHOTO = 3;
+    private static final int PHOTO_TAG = 4;
 
     //Formatter
     private SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM d, yyyy");
@@ -337,20 +338,24 @@ public class CrimeFragment extends Fragment {
         mPhotoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isFullImage){
-                    isFullImage = false;
-                    mPhotoView.setLayoutParams(new LinearLayout.LayoutParams
-                            (LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                    mPhotoView.setAdjustViewBounds(true);
-                }else {
-                    isFullImage = true;
-                    mPhotoView.setLayoutParams(new LinearLayout.LayoutParams
-                            (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-                    mPhotoView.setScaleType(ImageView.ScaleType.FIT_XY);
-                }
+                if (mPhotoFile==null || !mPhotoFile.exists()) return;   //no photo
+                FragmentManager fm = getFragmentManager();
+                ImageFullFragment dialog = ImageFullFragment.newInstance(mPhotoFile.getPath());
+                //dialog.show(fm, PHOTO_TAG);
             }
         });
         updatePhotoView();
         return view;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
