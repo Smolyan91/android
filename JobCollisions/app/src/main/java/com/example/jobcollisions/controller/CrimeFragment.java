@@ -23,6 +23,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.example.jobcollisions.R;
 import com.example.jobcollisions.controller.alert_dialog.DatePickerFragment;
@@ -60,6 +61,7 @@ public class CrimeFragment extends Fragment {
     private static final int REQUEST_TIME = 1;
     private static final int REQUEST_CONTACT = 2;
     private static final int REQUEST_PHOTO = 3;
+    private static final int PHOTO_TAG = 4;
 
     //Formatter
     private SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM d, yyyy");
@@ -77,6 +79,9 @@ public class CrimeFragment extends Fragment {
     private Button mPhoneButton;
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
+
+    // Flags and tmp_val
+    private static boolean isFullImage = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -329,7 +334,28 @@ public class CrimeFragment extends Fragment {
                 startActivityForResult(captureImg, REQUEST_PHOTO);
             }
         });
+
+        mPhotoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mPhotoFile==null || !mPhotoFile.exists()) return;   //no photo
+                FragmentManager fm = getFragmentManager();
+                ImageFullFragment dialog = ImageFullFragment.newInstance(mPhotoFile.getPath());
+                //dialog.show(fm, PHOTO_TAG);
+            }
+        });
         updatePhotoView();
         return view;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
