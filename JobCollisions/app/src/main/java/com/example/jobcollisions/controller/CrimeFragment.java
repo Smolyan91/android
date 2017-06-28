@@ -30,9 +30,13 @@ import com.example.jobcollisions.controller.alert_dialog.DatePickerFragment;
 import com.example.jobcollisions.controller.alert_dialog.TimePickerFragment;
 import com.example.jobcollisions.model.Crime;
 import com.example.jobcollisions.model.CrimeLab;
+import com.example.jobcollisions.picture.FullImgDialogFragment;
 import com.example.jobcollisions.picture.PictureUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -62,12 +66,14 @@ public class CrimeFragment extends Fragment {
     private static final int REQUEST_CONTACT = 2;
     private static final int REQUEST_PHOTO = 3;
     private static final int PHOTO_TAG = 4;
+    public static final String PHOTO_FULL = "photoForDialogFragment";
 
     //Formatter
     private SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMM d, yyyy");
     private SimpleDateFormat timeFormat = new SimpleDateFormat("HH : mm");
 
     //ViewController
+    private Bitmap mBitmapForTranssiveToFuulDialog;
     private Crime mCrime;
     private File mPhotoFile;
     private EditText mEditText;
@@ -216,7 +222,8 @@ public class CrimeFragment extends Fragment {
      */
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =inflater.inflate(R.layout.fragment_crime, container,false);
 
         mPhotoButton = (ImageButton) view.findViewById(R.id.camera_crime_button);
@@ -338,10 +345,25 @@ public class CrimeFragment extends Fragment {
         mPhotoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                updatePhotoView();
                 if (mPhotoFile==null || !mPhotoFile.exists()) return;   //no photo
-                FragmentManager fm = getFragmentManager();
-                ImageFullFragment dialog = ImageFullFragment.newInstance(mPhotoFile.getPath());
-                //dialog.show(fm, PHOTO_TAG);
+                FragmentManager fragmentManager = getFragmentManager();
+                ByteArrayOutputStream os = null;
+                try {
+                    os = new ByteArrayOutputStream();
+                    mPhotoView.buildDrawingCache();
+                    mBitmapForTranssiveToFuulDialog = mPhotoView.getDrawingCache();
+                    mBitmapForTranssiveToFuulDialog.compress(Bitmap.CompressFormat.JPEG, 50, os);
+                    FullImgDialogFragment dialogFragment =
+                            FullImgDialogFragment.newInstance(os.toByteArray());
+                    dialogFragment.show(getFragmentManager(), PHOTO_FULL);
+                }finally {
+                    try {
+                        os.close();
+                    }catch (IOException e){
+                        Log.e(e.fillInStackTrace().getMessage(), "Error byteArray");
+                    }
+                }
             }
         });
         updatePhotoView();
