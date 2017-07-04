@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -344,7 +345,7 @@ public class CrimeFragment extends Fragment {
 
         mPhotoView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { //TODO разобраться с этим дерьмом
                 updatePhotoView();
                 if (mPhotoFile==null || !mPhotoFile.exists()) return;   //no photo
                 FragmentManager fragmentManager = getFragmentManager();
@@ -356,7 +357,11 @@ public class CrimeFragment extends Fragment {
                     mBitmapForTranssiveToFuulDialog.compress(Bitmap.CompressFormat.JPEG, 50, os);
                     FullImgDialogFragment dialogFragment =
                             FullImgDialogFragment.newInstance(os.toByteArray());
-                    dialogFragment.show(getFragmentManager(), PHOTO_FULL);
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_crime_profile, dialogFragment);
+                    fragmentTransaction.commit();
+                    //dialogFragment.show(getFragmentManager(), PHOTO_FULL);
+
                 }finally {
                     try {
                         os.close();
