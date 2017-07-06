@@ -11,7 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.util.List;
+
 public class MusicBoxFragment extends Fragment {
+
+    private BeatBox beatBox;
+    private Sound mSound;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.i("INFO", "MusicBoxFragment.onCreate()");
+        beatBox = new BeatBox(getActivity());
+    }
 
     @Nullable
     @Override
@@ -23,19 +35,31 @@ public class MusicBoxFragment extends Fragment {
         //делаем в виде сетки из 3-х столбцов
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
         Log.i("INFO", "MusicBoxFragment");
-        recyclerView.setAdapter(new MusicAdapter());
+        recyclerView.setAdapter(new MusicAdapter(beatBox.getSounds()));
         return  view;
     }
 
     private class MusicHolder extends RecyclerView.ViewHolder{
 
         private Button mButton;
+
         public MusicHolder(LayoutInflater inflater, ViewGroup viewGroup) {
             super(inflater.inflate(R.layout.button_music_item, viewGroup, false));
             mButton = (Button) itemView.findViewById(R.id.button_item_music);
         }
+
+        public void bindSound(Sound sound){
+            mSound = sound;
+            mButton.setText(mSound.getNameSound());
+        }
     }
     private class MusicAdapter extends RecyclerView.Adapter<MusicHolder>{
+
+        private List<Sound> soundList;
+
+        public MusicAdapter(List<Sound> soundList) {
+            this.soundList = soundList;
+        }
 
         @Override
         public MusicHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -47,11 +71,13 @@ public class MusicBoxFragment extends Fragment {
         @Override
         public void onBindViewHolder(MusicHolder holder, int position) {
 
+            Sound sound = soundList.get(position);
+            holder.bindSound(sound);
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return soundList.size();
         }
     }
 
