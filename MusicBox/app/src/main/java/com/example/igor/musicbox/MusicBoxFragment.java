@@ -16,7 +16,6 @@ import java.util.List;
 public class MusicBoxFragment extends Fragment {
 
     private BeatBox beatBox;
-    private Sound mSound;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,18 +38,32 @@ public class MusicBoxFragment extends Fragment {
         return  view;
     }
 
-    private class MusicHolder extends RecyclerView.ViewHolder{
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        beatBox.release();
+    }
+
+    private class MusicHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private Button mButton;
+        private Sound mSound;
 
         public MusicHolder(LayoutInflater inflater, ViewGroup viewGroup) {
             super(inflater.inflate(R.layout.button_music_item, viewGroup, false));
             mButton = (Button) itemView.findViewById(R.id.button_item_music);
+            mButton.setOnClickListener(this);
         }
 
         public void bindSound(Sound sound){
             mSound = sound;
             mButton.setText(mSound.getNameSound());
+        }
+
+        @Override
+        public void onClick(View v) {
+            beatBox.play(mSound);
+            Log.d("D", mSound.getSoundId().toString());
         }
     }
     private class MusicAdapter extends RecyclerView.Adapter<MusicHolder>{
@@ -72,6 +85,7 @@ public class MusicBoxFragment extends Fragment {
         public void onBindViewHolder(MusicHolder holder, int position) {
 
             Sound sound = soundList.get(position);
+            Log.i("Pos ", position + "");
             holder.bindSound(sound);
         }
 
@@ -85,4 +99,6 @@ public class MusicBoxFragment extends Fragment {
         Log.i("INFO", "newMusicBoxFragment.newInstance()");
         return new MusicBoxFragment();
     }
+
+
 }

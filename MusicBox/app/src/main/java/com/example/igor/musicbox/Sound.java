@@ -8,6 +8,7 @@ public class Sound {
 
     private String mAssertPath;
     private String nameSound;
+    private Integer soundId;
 
     public Sound(String mAssertPath) {
         this.mAssertPath = mAssertPath;
@@ -22,5 +23,13 @@ public class Sound {
 
     public String getNameSound() {
         return nameSound;
+    }
+
+    public Integer getSoundId() {
+        return soundId;
+    }
+
+    public void setSoundId(Integer soundId) {
+        this.soundId = soundId;
     }
 }
