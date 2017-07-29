@@ -1,6 +1,7 @@
 package com.example.igor.newlauncher;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
@@ -63,7 +64,7 @@ public class NewLauncherFragment extends Fragment {
         mRecyclerView.setAdapter(new ActivityAdapter(activities));
     }
 
-    private class ActivityHolder extends RecyclerView.ViewHolder{
+    private class ActivityHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ResolveInfo mResolveInfo;
         private TextView nameTextView;
@@ -71,6 +72,7 @@ public class NewLauncherFragment extends Fragment {
         public ActivityHolder(View itemView) {
             super(itemView);
             nameTextView = (TextView) itemView;
+            nameTextView.setOnClickListener(this);
         }
 
         public void bindActivity(ResolveInfo resolveInfo){
@@ -78,6 +80,14 @@ public class NewLauncherFragment extends Fragment {
             PackageManager packageManager = getActivity().getPackageManager();
             String appName = mResolveInfo.loadLabel(packageManager).toString();
             nameTextView.setText(appName);
+        }
+
+        @Override
+        public void onClick(View v) {
+            ActivityInfo activityInfo = mResolveInfo.activityInfo;
+            Intent intent = new Intent(Intent.ACTION_MAIN).setClassName(activityInfo
+                    .applicationInfo.packageName, activityInfo.name);
+            startActivity(intent);
         }
     }
 
